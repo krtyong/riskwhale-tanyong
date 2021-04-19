@@ -10,8 +10,7 @@ const UserSchema = mongoose.Schema({
         required: true
     },
     retypepassword: {
-        type: String,
-        required: true
+        type: String
     },
     firstname: {
         type: String,

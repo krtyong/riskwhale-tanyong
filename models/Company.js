@@ -10,8 +10,7 @@ const CompanySchema = mongoose.Schema({
         required: true
     },
     retypepassword: {
-        type: String,
-        required: true
+        type: String
     },
     companyname: {
         type: String,
@@ -56,7 +55,7 @@ const CompanySchema = mongoose.Schema({
         }
     },
     functionaldepartments: {
-        type: String,
+        type: Array,
         required: true
     },
     confirmed: {
