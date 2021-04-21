@@ -1,0 +1,8 @@
+{
+    "appService.zipIgnorePattern": [
+        "node_modules{,/**}",
+        ".vscode{,/**}"
+    ],
+    "appService.defaultWebAppToDeploy": "/subscriptions/58bbc24b-050b-41b8-aeae-fead5516a702/resourceGroups/appsvc_linux_centralus/providers/Microsoft.Web/sites/api-riskwhale",
+    "appService.deploySubpath": "."
+}
