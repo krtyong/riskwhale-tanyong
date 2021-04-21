@@ -101,7 +101,7 @@ router.get('/login', (req, res) => {
 
 router.post('/login', jsonParser, async (req,res) => {
     // checking if user exists
-    const loginUser = await User.findOne({ email: req.body.email }); 
+    const loginUser = await User.findOne({ email: req.body.email }) || await Company.findOne({ email: req.body.email }); 
     if (!loginUser) {
         return res.status(400).send('Email is not found');
     }

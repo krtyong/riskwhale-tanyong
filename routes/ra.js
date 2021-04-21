@@ -49,7 +49,7 @@ router.post('/:department', jsonParser, async(req, res) => {
 });
 
 router.post('/result', async(req, res) => {
-    const result = await Ra.find({ id_company: req.body.id_company });
+    const result = await Ra.findAll({ id_company: req.body.id_company });
 
     try {
         res.send(result)
