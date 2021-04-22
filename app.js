@@ -43,7 +43,7 @@ const userinfo = require('./routes/userinfo');
 // app.use('/login', login);
 app.use('/user', auth);
 app.use('/:id/bia', bia);
-app.use('/:id/ra', bia);
+app.use('/ra', ra);
 app.use('/userinfo', userinfo);
 
 app.use(bodyParser.json());
