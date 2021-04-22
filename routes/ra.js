@@ -52,7 +52,7 @@ router.post('/result', async(req, res) => {
     const result = await Ra.findAll({ id_company: req.body.id_company });
 
     try {
-        res.send(result)
+        res.render(result)
     } catch(err) {
         res.json( { message: err });
     }

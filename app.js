@@ -35,6 +35,7 @@ const app = express();
 const auth = require('./routes/auth');
 const bia = require('./routes/bia');
 const ra = require('./routes/ra');
+const userinfo = require('./routes/userinfo');
 
 //middleware
 // app.use('/signup-indiv', signupInd);
@@ -43,6 +44,8 @@ const ra = require('./routes/ra');
 app.use('/user', auth);
 app.use('/:id/bia', bia);
 app.use('/:id/ra', bia);
+app.use('/userinfo', userinfo);
+
 app.use(bodyParser.json());
 
 app.get('/', (req, res) => {
