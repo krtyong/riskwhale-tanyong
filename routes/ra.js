@@ -3,57 +3,90 @@ const Ra = require('../models/RiskAssessment');
 const bodyParser = require('body-parser');
 var jsonParser = bodyParser.json();
 
-router.post('/:department', jsonParser, async(req, res) => {
-    res.send('welcome to /:department');
+router.post('/:id', jsonParser, async (req, res) => {
+  const companyID = req.params.id;
 
-    const companyID = req.body._id;
-    // const foundone = await Company.findById(companyID) && await Company.findOne({ canvas.model : req.body.canvas.model});
+  const impactaverage =
+    (req.body.box[0].impacts.financial +
+      req.body.box[0].impacts.healthandsafety +
+      req.body.box[0].impacts.naturalenv +
+      req.body.box[0].impacts.socialheritage +
+      req.body.box[0].impacts.government +
+      req.body.box[0].impacts.legal) /
+    6;
+  const likelihood = req.body.box[0].likelihood;
+  const score = Math.round(impactaverage * likelihood);
 
-    // if (foundone) {
-    //     res.status(400).send('Already has this canvas model');
-    // }
-
-    const impactaverage = (req.body.canvas.impacts.financial + req.body.canvas.impacts.healthandsafety + req.body.canvas.impacts.naturalenv + req.body.canvas.impacts.socialheritage + req.body.canvas.impacts.government + req.body.canvas.impacts.legal)/6;
-    const likelihood = req.body.canvas.likelihood;
-    const score = impactaverage*likelihood;
-    
+  const box = await Ra.findOne({ id_company: companyID }).exec();
+  if (!box) {
     const ra = new Ra({
-        id_company: companyID,
-        canvas: {
-            model: req.body.canvas.model,
-            typeofrisks: req.body.canvas.typeofrisks,
-            risk: req.body.canvas.risk,
-            impacts: {
-                financial: req.body.canvas.impacts.financial,
-                healthandsafety: req.body.canvas.impacts.healthandsafety,
-                naturalenv: req.body.canvas.impacts.naturalenv,
-                socialheritage: req.body.canvas.impacts.socialheritage,
-                government: req.body.canvas.impacts.government,
-                legal: req.body.canvas.impacts.legal,
-            },
-            likelihood: req.body.canvas.likelihood,
-            levelofacceptance: req.body.canvas.levelofacceptance,
-            impactaverage: impactaverage,
-            coordinate: [likelihood, impactaverage],
-            score: score
-        }
+      id_company: companyID,
+      box: [
+        {
+          model: req.body.box[0].model,
+          typeofrisks: req.body.box[0].typeofrisks,
+          risk: req.body.box[0].risk,
+          impacts: {
+            financial: req.body.box[0].impacts.financial,
+            healthandsafety: req.body.box[0].impacts.healthandsafety,
+            naturalenv: req.body.box[0].impacts.naturalenv,
+            socialheritage: req.body.box[0].impacts.socialheritage,
+            government: req.body.box[0].impacts.government,
+            legal: req.body.box[0].impacts.legal,
+          },
+          likelihood: req.body.box[0].likelihood,
+          score: score,
+          impactaverage: impactaverage,
+          coordinate: [impactaverage, likelihood],
+        },
+      ],
     });
 
     try {
-        const savedPost = await ra.save();
-        // res.json(savedPost);
-        res.send({ user: user._id});
-    } catch(err) {
-        res.json( { message: err });
+      const savedPost = await ra.save();
+      res.send(savedPost);
+    } catch (err) {
+      res.json({ message: err });
     }
+  } else {
+    const updated = await Ra.findOneAndUpdate(
+      { id_company: companyID },
+      {
+        $push: {
+          box: {
+            model: req.body.box[0].model,
+            typeofrisks: req.body.box[0].typeofrisks,
+            risk: req.body.box[0].risk,
+            impacts: {
+              financial: req.body.box[0].impacts.financial,
+              healthandsafety: req.body.box[0].impacts.healthandsafety,
+              naturalenv: req.body.box[0].impacts.naturalenv,
+              socialheritage: req.body.box[0].impacts.socialheritage,
+              government: req.body.box[0].impacts.government,
+              legal: req.body.box[0].impacts.legal,
+            },
+            likelihood: req.body.box[0].likelihood,
+            score: score,
+            impactaverage: impactaverage,
+            coordinate: [impactaverage, likelihood],
+          },
+        },
+      }
+    );
+    res.send(updated);
+  }
 });
 
-router.post('/result', async(req, res) => {
-    const result = await Ra.findAll({ id_company: req.body.id_company });
-
-    try {
-        res.render(result)
-    } catch(err) {
-        res.json( { message: err });
+router.get('/:id/result', async (req, res) => {
+  const companyID = req.params.id;
+  console.log(companyID);
+  const result = await Ra.findOne({ id_company: companyID }, (err, data) => {
+    if (err) {
+      res.send('no result');
+    } else {
+      res.send(data);
     }
+  });
 });
+
+module.exports = router;

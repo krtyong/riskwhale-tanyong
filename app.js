@@ -51,10 +51,10 @@ const userinfo = require("./routes/userinfo");
 // app.use('/signup-indiv', signupInd);
 // app.use('/signup-company', signupCompany);
 // app.use('/login', login);
-app.use("/user", auth);
-app.use("/:id/bia", bia);
-app.use("/:id/ra", bia);
-app.use("/userinfo", userinfo);
+app.use('/user', auth);
+app.use('/:id/bia', bia);
+app.use('/ra', ra);
+app.use('/userinfo', userinfo);
 
 app.use(bodyParser.json());
 
