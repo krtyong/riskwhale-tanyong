@@ -1,41 +1,51 @@
 //jshint esversion: 6
 
-const express = require('express');
-const bodyParser = require('body-parser');
+const express = require("express");
+const bodyParser = require("body-parser");
 const request = require("request");
-const mongoose = require('mongoose');
-
-
+const mongoose = require("mongoose");
+const cors = require("cors");
 //Hide db user password
-require('dotenv').config();
+require("dotenv").config();
 // Connect to DB
 // mongoose.connect(
-//     process.env.DB_CONNECT, 
+//     process.env.DB_CONNECT,
 //     { useNewUrlParser: true, useUnifiedTopology: true }, () => {
 //     console.log('connected to database');
 // });
-mongoose.connect("mongodb://"+process.env.COSMOSDB_HOST+":"+process.env.COSMOSDB_PORT+"/"+process.env.COSMOSDB_DBNAME+"?ssl=true&replicaSet=globaldb", {
-  auth: {
-    user: process.env.COSMOSDB_USER,
-    password: process.env.COSMOSDB_PASSWORD
-  },
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-    retryWrites: false
-    })
-.then(() => console.log('Connection to CosmosDB successful'))
-.catch((err) => console.error(err));
+mongoose
+  .connect(
+    "mongodb://" +
+      process.env.COSMOSDB_HOST +
+      ":" +
+      process.env.COSMOSDB_PORT +
+      "/" +
+      process.env.COSMOSDB_DBNAME +
+      "?ssl=true&replicaSet=globaldb",
+    {
+      auth: {
+        user: process.env.COSMOSDB_USER,
+        password: process.env.COSMOSDB_PASSWORD,
+      },
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+      retryWrites: false,
+    }
+  )
+  .then(() => console.log("Connection to CosmosDB successful"))
+  .catch((err) => console.error(err));
 
 const app = express();
+app.use(cors());
 
 //Import Route
 // const signupInd = require('./routes/signup-indiv');
 // const signupCompany = require('./routes/signup-company');
 // const login = require('./routes/login');
-const auth = require('./routes/auth');
-const bia = require('./routes/bia');
-const ra = require('./routes/ra');
-const userinfo = require('./routes/userinfo');
+const auth = require("./routes/auth");
+const bia = require("./routes/bia");
+const ra = require("./routes/ra");
+const userinfo = require("./routes/userinfo");
 
 //middleware
 app.use('/user', auth);
@@ -45,12 +55,12 @@ app.use('/userinfo', userinfo);
 
 app.use(bodyParser.json());
 
-app.get('/', (req, res) => {
-    //landing at signup.html page
-    // res.sendFile(__dirname + "/signup.html");
-    res.send('welcome to risk whale');
+app.get("/", (req, res) => {
+  //landing at signup.html page
+  // res.sendFile(__dirname + "/signup.html");
+  res.send("welcome to risk whale");
 });
 
-app.listen(3000, function() {
-    console.log('Server is running on port 3000');
+app.listen(1000, function () {
+  console.log("Server is running on port 1000");
 });
