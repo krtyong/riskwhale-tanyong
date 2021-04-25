@@ -6,6 +6,66 @@ const bodyParser = require('body-parser');
 var jsonParser = bodyParser.json();
 const mongoose = require('mongoose');
 
+router.post('/:id/mtpd', jsonParser, async (req, res) => {
+  const { departmentmtpd } = req.body;
+  const { id } = req.params;
+  // const id = req.body.id_company;
+  mongoose.set('useFindAndModify', false);
+
+  for (const element in departmentmtpd) {
+    const department = departmentmtpd[element].name;
+    await Bia.findOneAndUpdate(
+      {
+        id_company: id,
+        department: { $elemMatch: { name: department } },
+      },
+      {
+        $set: {
+          'department.$.mtpd': req.body.departmentmtpd[element].mtpd,
+          companymtpd: req.body.companymtpd,
+        },
+      }
+    );
+  }
+
+  const result = await Bia.findOne({ id_company: id }, { _id: false });
+  if (result) {
+    res.send(result);
+  } else {
+    res.status(400).send('cannot post');
+  }
+});
+
+router.post('/:id/rto', jsonParser, async (req, res) => {
+  const { departmentrto } = req.body;
+  const { id } = req.params;
+  // const id = req.body.id_company;
+  mongoose.set('useFindAndModify', false);
+
+  for (const element in departmentrto) {
+    const department = departmentrto[element].name;
+    await Bia.findOneAndUpdate(
+      {
+        id_company: id,
+        department: { $elemMatch: { name: department } },
+      },
+      {
+        $set: {
+          'department.$.rto': req.body.departmentrto[element].rto,
+          companyrto: req.body.companyrto,
+        },
+      }
+    );
+  }
+
+  const result = await Bia.findOne({ id_company: id }, { _id: false });
+  if (result) {
+    res.send(result);
+  } else {
+    res.status(400).send('cannot post');
+  }
+});
+
 router.post('/:id/:department', jsonParser, async (req, res) => {
   const { id, department } = req.params;
   const { situation } = req.body;
@@ -60,46 +120,6 @@ router.get('/:id/:department', jsonParser, async (req, res) => {
     res.send(data);
     console.log(data);
   }
-});
-
-router.post('/mtpd', jsonParser, async (req, res) => {
-  const { departmentmtpd } = req.body;
-  const id = req.body.id_company;
-
-  for (const element in departmentmtpd) {
-    const result = await Bia.find({
-      id_company: id,
-      department: { $elemMatch: { name: department } },
-    });
-  }
-  console.log(result);
-});
-
-router.post('/:id/:department/mtpdandrto', jsonParser, async (req, res) => {
-  const { id, department } = req.params;
-  mongoose.set('useFindAndModify', false);
-  const data = await Bia.findOneAndUpdate(
-    {
-      id_company: id,
-      department: { $elemMatch: { name: department } },
-    },
-    {
-      $set: {
-        'department.$.mtpd': req.body.mtpd,
-        'department.$.rto': req.body.rto,
-        companymtpd: req.body.companymtpd,
-        companyrto: req.body.companyrto,
-      },
-    },
-    (err, result) => {
-      if (err) {
-        res.status(400).send('cannot add mtpd or rto');
-      } else {
-        res.send(result);
-        //response is not update
-      }
-    }
-  );
 });
 
 router.get('/:id', jsonParser, async (req, res) => {
