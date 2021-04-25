@@ -48,11 +48,8 @@ const ra = require("./routes/ra");
 const userinfo = require("./routes/userinfo");
 
 //middleware
-// app.use('/signup-indiv', signupInd);
-// app.use('/signup-company', signupCompany);
-// app.use('/login', login);
 app.use('/user', auth);
-app.use('/:id/bia', bia);
+app.use('/bia', bia);
 app.use('/ra', ra);
 app.use('/userinfo', userinfo);
 

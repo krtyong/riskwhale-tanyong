@@ -1,10 +1,15 @@
 const router = require('express').Router();
 const Ra = require('../models/RiskAssessment');
+const User = require('../models/User');
+const Company = require('../models/Company');
 const bodyParser = require('body-parser');
 var jsonParser = bodyParser.json();
 
 router.post('/:id', jsonParser, async (req, res) => {
   const companyID = req.params.id;
+
+  const existed = await User.findById(companyID) || await Company.findById(companyID);
+  if(!existed) res.send('user id does not match');
 
   const impactaverage =
     (req.body.box[0].impacts.financial +

@@ -1,84 +1,117 @@
 const router = require('express').Router();
-const NormalFunctionalDepartment = require('../models/NormalFunctionalDepartment');
-const EmerFunctionalDepartment = require('../models/EmerFunctionalDepartment');
+const Bia = require('../models/BusinessImpacts');
+const User = require('../models/User');
+const Company = require('../models/Company');
 const bodyParser = require('body-parser');
 var jsonParser = bodyParser.json();
-const Company = require('../models/Company');
+const mongoose = require('mongoose');
 
-router.get('/:department', jsonParser, (req, res) => {
-    res.send('welcome to /:department');
-})
+router.post('/:id/:department', jsonParser, async (req, res) => {
+  const { id, department } = req.params;
+  const { situation } = req.body;
+  mongoose.set('useFindAndModify', false);
 
-router.post('/:department/normal-situation', jsonParser, async (req,res) => {
+  // const existed =
+  //   (await User.findById(companyID)) || (await Company.findById(companyID));
+  // if (!existed) res.send('user id does not match');
 
-    const companyID = req.body._id;
-    const foundone = await Company.findById(companyID, (err, data) => {
-        if(err) {
-            res.send({ message: err })
-        } else {
-            // console.log(data)
-            res.send('found')
-            console.log(data.functionalDepartmentsEmer)
-        }
+  const existed = await Bia.findOne({ id_company: id });
+  if (!existed) {
+    const bia = new Bia({
+      id_company: id,
+      department: [{ name: department, situation: situation }],
     });
 
-    const functionalAreaNormal = new NormalFunctionalDepartment({
-        id_company: req.body._id,
-        normalSituation: {
-            objective: req.body.objective,
-            department: req.body.department,
-            activities: req.body.activities
-        }
-    });
-
-    // save to database, return a promise
     try {
-        const savedPost = await functionalAreaNormal.save();
-        // res.json(savedPost);
-        res.send('posted');
-    } catch(err) {
-        res.json( { message: err });
+      const savedPost = await bia.save();
+      res.send(savedPost);
+    } catch (err) {
+      res.json({ message: err });
     }
+  } else {
+    const updated = await Bia.findOneAndUpdate(
+      { id_company: id },
+      {
+        $push: {
+          department: [{ name: department, situation: situation }],
+        },
+      }
+    );
+    res.send(updated);
+  }
+
+  // const user = await Bia.findOne({ id_company: companyID });
+  // if(!user) {
+  // }
 });
 
-router.post('/:department/emer-situation', jsonParser, async (req,res) => {
-    // create a new user
-    const functionalDepartmentsEmer = new EmerFunctionalDepartment({
-        id_company: req.body._id,
-        normalSituation: {
-            objective: req.body.objective,
-            department: req.body.department,
-            activities: req.body.activities
-        }
+router.get('/:id/:department', jsonParser, async (req, res) => {
+  const { id, department } = req.params;
+  const data = await Bia.findOne(
+    {
+      id_company: id,
+      department: { $elemMatch: { name: department } },
+    },
+    { _id: false }
+  );
+  if (!data) {
+    res.send('No information about this user');
+  } else {
+    res.send(data);
+    console.log(data);
+  }
+});
+
+router.post('/mtpd', jsonParser, async (req, res) => {
+  const { departmentmtpd } = req.body;
+  const id = req.body.id_company;
+
+  for (const element in departmentmtpd) {
+    const result = await Bia.find({
+      id_company: id,
+      department: { $elemMatch: { name: department } },
     });
+  }
+  console.log(result);
+});
 
-    // save to database, return a promise
-    try {
-        const savedPost = await functionalDepartmentsEmer.save();
-        res.json(savedPost);
-    } catch(err) {
-        res.json( { message: err });
+router.post('/:id/:department/mtpdandrto', jsonParser, async (req, res) => {
+  const { id, department } = req.params;
+  mongoose.set('useFindAndModify', false);
+  const data = await Bia.findOneAndUpdate(
+    {
+      id_company: id,
+      department: { $elemMatch: { name: department } },
+    },
+    {
+      $set: {
+        'department.$.mtpd': req.body.mtpd,
+        'department.$.rto': req.body.rto,
+        companymtpd: req.body.companymtpd,
+        companyrto: req.body.companyrto,
+      },
+    },
+    (err, result) => {
+      if (err) {
+        res.status(400).send('cannot add mtpd or rto');
+      } else {
+        res.send(result);
+        //response is not update
+      }
     }
+  );
 });
 
-// each department's mtpd
-router.post('/:department/mtpd', jsonParser, async (req,res) => {
-
-});
-
-// each department's rto
-router.post('/:department/rto', jsonParser, async (req,res) => {
-    
-});
-
-// company's mtpd
-router.post('/mtpd', jsonParser, async (req,res) => {
-
-});
-
-// company's rto
-router.post('/rto', jsonParser, async (req,res) => {
-
+router.get('/:id', jsonParser, async (req, res) => {
+  const { id } = req.params;
+  // const existed = Bia.findOne({ id_company: id });
+  // if (existed) res.send(existed);
+  const data = await Bia.find({ id_company: id }, { _id: false }).exec();
+  if (data) {
+    res.send(data);
+  } else {
+    res.send('user not match');
+  }
 });
 
 module.exports = router;

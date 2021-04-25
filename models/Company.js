@@ -41,17 +41,14 @@ const CompanySchema = mongoose.Schema({
       type: String,
       required: true,
     },
-    customersegments: {
-      type: String,
-      required: true,
-    },
-    coststructure: {
-      type: String,
-      required: true,
-    },
-    revenuestream: {
-      type: String,
-      required: true,
+    functionaldepartments: [
+        {
+            name: String
+        }
+    ],
+    confirmed: {
+        type: String,
+        required: true
     }
   },
   functionaldepartments: 
