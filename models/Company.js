@@ -54,10 +54,11 @@ const CompanySchema = mongoose.Schema({
             required: true
         }
     },
-    functionaldepartments: {
-        type: Array,
-        required: true
-    },
+    functionaldepartments: [
+        {
+            name: String
+        }
+    ],
     confirmed: {
         type: String,
         required: true
