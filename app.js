@@ -61,6 +61,8 @@ app.get("/", (req, res) => {
   res.send("welcome to risk whale");
 });
 
-app.listen(1000, function () {
+const port = process.env.PORT || 1000;
+
+app.listen(port, function () {
   console.log("Server is running on port 1000");
 });

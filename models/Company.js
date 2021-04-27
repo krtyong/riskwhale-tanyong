@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 
 const CompanySchema = mongoose.Schema({
   email: {
@@ -41,26 +41,18 @@ const CompanySchema = mongoose.Schema({
       type: String,
       required: true,
     },
-    functionaldepartments: [
-        {
-            name: String
-        }
-    ],
-    confirmed: {
-        type: String,
-        required: true
-    }
   },
-  functionaldepartments: 
-    [{
-        name: {
-            type: String
-        }
-    }],
+  functionaldepartments: [
+    {
+      name: {
+        type: String,
+      },
+    },
+  ],
   confirmed: {
     type: String,
     required: true,
   },
 });
 
-module.exports = mongoose.model("Company", CompanySchema);
+module.exports = mongoose.model('Company', CompanySchema);
