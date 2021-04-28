@@ -45,13 +45,9 @@ const raSchema = mongoose.Schema({
           required: true,
         },
       },
-      likelihood: {
-        type: Number,
-        required: true,
-      },
-      impactaverage: Number,
-      coordinate: Array,
-      score: Number,
+      likelihood: Number,
+      impact: Number,
+      value: Number,
     },
   ],
 });

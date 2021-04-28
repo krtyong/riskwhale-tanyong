@@ -12,7 +12,7 @@ router.post('/:id/mtpd', jsonParser, async (req, res) => {
   // const id = req.body.id_company;
   mongoose.set('useFindAndModify', false);
 
-  for (const element in departmentmtpd) {
+  for (let element in departmentmtpd) {
     const department = departmentmtpd[element].name;
     await Bia.findOneAndUpdate(
       {
