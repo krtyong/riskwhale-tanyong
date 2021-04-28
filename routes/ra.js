@@ -22,7 +22,7 @@ router.post('/:id', jsonParser, async (req, res) => {
     6;
   const likelihood = req.body.box[0].likelihood;
   const impact = Math.round(impactaverage);
-  const value = 0;
+  let value = 0;
   // const score = Math.round(impactaverage * likelihood);
 
   if (impact === 1 && likelihood === 1) value = 1;
