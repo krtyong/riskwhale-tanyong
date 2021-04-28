@@ -103,9 +103,8 @@ router.post('/:id', jsonParser, async (req, res) => {
               legal: req.body.box[0].impacts.legal,
             },
             likelihood: req.body.box[0].likelihood,
-            score: score,
-            impactaverage: impactaverage,
-            coordinate: [impactaverage, likelihood],
+            impact: impact,
+            value: value,
           },
         },
       }
