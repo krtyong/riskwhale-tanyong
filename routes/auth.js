@@ -126,7 +126,7 @@ router.post('/login', jsonParser, async (req, res) => {
   const token = jwt.sign({ _id: loginUser._id }, process.env.TOKEN_SECRET);
   try {
     // res.header('auth-token', token).send(token);
-    res.send(loginUser.typeofuser);
+    res.send({ type: loginUser.typeofuser });
   } catch (err) {
     res.json('cannot log in');
   }
