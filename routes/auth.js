@@ -113,7 +113,7 @@ router.post('/login', jsonParser, async (req, res) => {
     (await User.findOne({ email: req.body.email })) ||
     (await Company.findOne({ email: req.body.email }));
   if (!loginUser) {
-    return res.status(400).send('Email is not found');
+    return res.status(400).send('Email not found');
   }
 
   // password is correct やった！
@@ -125,7 +125,9 @@ router.post('/login', jsonParser, async (req, res) => {
   // create token
   const token = jwt.sign({ _id: loginUser._id }, process.env.TOKEN_SECRET);
   try {
-    res.header('auth-token', token).send({ type: loginUser.typeofuser });
+    res
+      .header('auth-token', token)
+      .send({ authtoken: token, type: loginUser.typeofuser });
     // res.send({ type: loginUser.typeofuser });
   } catch (err) {
     res.json('cannot log in');
