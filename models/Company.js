@@ -53,6 +53,14 @@ const CompanySchema = mongoose.Schema({
     type: String,
     required: true,
   },
+  tick: {
+    type: Boolean,
+    required: true,
+  },
+  typeofuser: {
+    type: String,
+    required: true
+  }
 });
 
 module.exports = mongoose.model('Company', CompanySchema);

@@ -20,7 +20,14 @@ const UserSchema = mongoose.Schema({
     type: String,
     required: true,
   },
-  institute: String,
+  typeofuser: {
+    type: String,
+    required: true,
+  },
+  institute: {
+    type: String,
+    required: true,
+  },
   companyname: String,
   businessmodel: {
     keypartners: String,
