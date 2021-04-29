@@ -127,7 +127,11 @@ router.post('/login', jsonParser, async (req, res) => {
   try {
     res
       .header('auth-token', token)
-      .send({ authtoken: token, type: loginUser.typeofuser });
+      .send({
+        authtoken: token,
+        type: loginUser.typeofuser,
+        id_company: loginUser._id,
+      });
     // res.send({ type: loginUser.typeofuser });
   } catch (err) {
     res.json('cannot log in');
