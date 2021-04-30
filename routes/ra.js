@@ -98,13 +98,16 @@ router.post('/:id', jsonParser, async (req, res) => {
 router.get('/:id/result', async (req, res) => {
   const companyID = req.params.id;
   console.log(companyID);
-  const result = await Ra.findOne({ id_company: companyID }, (err, data) => {
-    if (err) {
-      res.send('no result');
-    } else {
-      res.send(data);
-    }
-  });
+  const result = await Ra.findOne({ id_company: companyID }, { _id: false });
+  if (!result) {
+    res.status(400).json({ message: 'user id is not correct' });
+  }
+
+  try {
+    res.send(result);
+  } catch (err) {
+    res.status(400).json({ message: 'cannot send result' });
+  }
 });
 
 module.exports = router;
