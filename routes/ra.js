@@ -4,8 +4,9 @@ const User = require('../models/User');
 const Company = require('../models/Company');
 const bodyParser = require('body-parser');
 var jsonParser = bodyParser.json();
+const verify = require('./verifytoken');
 
-router.post('/:id', jsonParser, async (req, res) => {
+router.post('/:id', verify, jsonParser, async (req, res) => {
   const companyID = req.params.id;
 
   const existed =
@@ -95,7 +96,7 @@ router.post('/:id', jsonParser, async (req, res) => {
   }
 });
 
-router.get('/:id/result', async (req, res) => {
+router.get('/:id/result', verify, async (req, res) => {
   const companyID = req.params.id;
   console.log(companyID);
   const result = await Ra.findOne({ id_company: companyID }, { _id: false });

@@ -4,8 +4,9 @@ const Company = require('../models/Company');
 const bodyParser = require('body-parser');
 var jsonParser = bodyParser.json();
 const mongoose = require('mongoose');
+const verify = require('./verifytoken');
 
-router.get('/:id', jsonParser, async (req, res) => {
+router.get('/:id', verify, jsonParser, async (req, res) => {
   // res.sendFile(__dirname + "/signup.html");
   const id = req.params.id;
 
@@ -22,7 +23,7 @@ router.get('/:id', jsonParser, async (req, res) => {
   }
 });
 
-router.get('/ind/:id', jsonParser, async (req, res) => {
+router.get('/ind/:id', verify, jsonParser, async (req, res) => {
   // res.sendFile(__dirname + "/signup.html");
   const id = req.params.id;
   const business = JSON.stringify(req.query.business);
