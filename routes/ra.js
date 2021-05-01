@@ -90,7 +90,8 @@ router.post('/:id', verify, jsonParser, async (req, res) => {
             value: value,
           },
         },
-      }
+      },
+      { new: true }
     );
     res.send(updated);
   }

@@ -55,7 +55,8 @@ router.post('/:id/rto', verify, jsonParser, async (req, res) => {
           'department.$.rto': req.body.departmentrto[element].rto,
           companyrto: req.body.companyrto,
         },
-      }
+      },
+      { new: true }
     );
   }
 
@@ -96,7 +97,8 @@ router.post('/:id/:department', verify, jsonParser, async (req, res) => {
         $push: {
           department: [{ name: department, situation: situation }],
         },
-      }
+      },
+      { new: true }
     );
     res.send(updated);
   }

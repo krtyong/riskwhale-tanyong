@@ -65,31 +65,34 @@ router.get('/ind/:id', verify, jsonParser, async (req, res) => {
     };
 
     try {
-      const completeusers = await User.findByIdAndUpdate(id, {
-        $set: {
-          companyname: pizzashop.companyname,
-          businessmodel: {
-            keypartners: pizzashop.businessmodel.keypartners,
-            keyactivities: pizzashop.businessmodel.keyactivities,
-            keyresources: pizzashop.businessmodel.keyresources,
-            valueproposition: pizzashop.businessmodel.valueproposition,
-            customerrelationships:pizzashop.businessmodel.customerrelationships,
-            channels: pizzashop.businessmodel.channels,
-            customersegments: pizzashop.businessmodel.customersegments,
-            coststructure: pizzashop.businessmodel.coststructure,
-            revenuestream: pizzashop.businessmodel.revenuestream,
+      const completeusers = await User.findByIdAndUpdate(
+        id,
+        {
+          $set: {
+            companyname: pizzashop.companyname,
+            businessmodel: {
+              keypartners: pizzashop.businessmodel.keypartners,
+              keyactivities: pizzashop.businessmodel.keyactivities,
+              keyresources: pizzashop.businessmodel.keyresources,
+              valueproposition: pizzashop.businessmodel.valueproposition,
+              customerrelationships:
+                pizzashop.businessmodel.customerrelationships,
+              channels: pizzashop.businessmodel.channels,
+              customersegments: pizzashop.businessmodel.customersegments,
+              coststructure: pizzashop.businessmodel.coststructure,
+              revenuestream: pizzashop.businessmodel.revenuestream,
+            },
+            functionaldepartments: pizzashop.functionaldepartments,
           },
-          functionaldepartments: pizzashop.functionaldepartments,
         },
-      });
-      console.log(completeusers)
+        { new: true }
+      );
+      console.log(completeusers);
       res.send(completeusers);
     } catch (err) {
       console.log('cannot fins and get data from users schema');
     }
   }
-
-
 });
 
 module.exports = router;
