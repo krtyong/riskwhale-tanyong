@@ -6,7 +6,7 @@ var jsonParser = bodyParser.json();
 const mongoose = require('mongoose');
 const verify = require('./verifytoken');
 
-router.get('/:id', verify, jsonParser, async (req, res) => {
+router.get('/company/:id', verify, jsonParser, async (req, res) => {
   // res.sendFile(__dirname + "/signup.html");
   const id = req.params.id;
 
@@ -26,8 +26,13 @@ router.get('/:id', verify, jsonParser, async (req, res) => {
 router.get('/ind/:id', verify, jsonParser, async (req, res) => {
   // res.sendFile(__dirname + "/signup.html");
   const id = req.params.id;
-  const business = JSON.stringify(req.query.business);
+  const business = req.query.business;
   mongoose.set('useFindAndModify', false);
+
+  const user = await User.findById(id);
+  if (!user) {
+    res.json({ message: 'user is not in database' });
+  }
 
   if (business === 'pizza') {
     const pizzashop = {
@@ -68,8 +73,7 @@ router.get('/ind/:id', verify, jsonParser, async (req, res) => {
             keyactivities: pizzashop.businessmodel.keyactivities,
             keyresources: pizzashop.businessmodel.keyresources,
             valueproposition: pizzashop.businessmodel.valueproposition,
-            customerrelationships:
-              pizzashop.businessmodel.customerrelationships,
+            customerrelationships:pizzashop.businessmodel.customerrelationships,
             channels: pizzashop.businessmodel.channels,
             customersegments: pizzashop.businessmodel.customersegments,
             coststructure: pizzashop.businessmodel.coststructure,
@@ -78,24 +82,14 @@ router.get('/ind/:id', verify, jsonParser, async (req, res) => {
           functionaldepartments: pizzashop.functionaldepartments,
         },
       });
-      if (completeusers) {
-        res.send(completeusers);
-      }
+      console.log(completeusers)
+      res.send(completeusers);
     } catch (err) {
       console.log('cannot fins and get data from users schema');
     }
   }
-  const user = (await Company.findById(id)) || (await User.findById(id));
 
-  if (!user) {
-    res.send({ message: err });
-  }
 
-  try {
-    res.send(user);
-  } catch (err) {
-    console.log('cannot send user');
-  }
 });
 
 module.exports = router;
