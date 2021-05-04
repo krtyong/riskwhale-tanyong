@@ -41,22 +41,14 @@ const CompanySchema = mongoose.Schema({
       type: String,
       required: true,
     },
-    functionaldepartments: [
-        {
-            name: String
-        }
-    ],
-    confirmed: {
-        type: String,
-        required: true
-    }
   },
-  functionaldepartments: 
-    [{
-        name: {
-            type: String
-        }
-    }],
+  functionaldepartments: [
+    {
+      name: {
+        type: String,
+      },
+    },
+  ],
   confirmed: {
     type: String,
     required: true,
