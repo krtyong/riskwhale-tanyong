@@ -5,6 +5,7 @@ const bodyParser = require("body-parser");
 const request = require("request");
 const mongoose = require("mongoose");
 const cors = require("cors");
+const port = process.env.PORT || 1000;
 //Hide db user password
 require("dotenv").config();
 // Connect to DB
@@ -39,9 +40,6 @@ const app = express();
 app.use(cors());
 
 //Import Route
-// const signupInd = require('./routes/signup-indiv');
-// const signupCompany = require('./routes/signup-company');
-// const login = require('./routes/login');
 const auth = require("./routes/auth");
 const bia = require("./routes/bia");
 const ra = require("./routes/ra");
@@ -61,6 +59,6 @@ app.get("/", (req, res) => {
   res.send("welcome to risk whale");
 });
 
-app.listen(1000, function () {
+app.listen(port, function () {
   console.log("Server is running on port 1000");
 });
