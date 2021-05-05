@@ -7,16 +7,6 @@ var jsonParser = bodyParser.json();
 const verify = require('./verifytoken');
 
 router.post('/:id', verify, jsonParser, async (req, res) => {
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader(
-    'Access-Control-Allow-Methods',
-    'GET, POST, OPTIONS, PUT, PATCH, DELETE'
-  ); // If needed
-  res.setHeader(
-    'Access-Control-Allow-Headers',
-    'X-Requested-With,content-type'
-  );
-  res.setHeader('Access-Control-Allow-Credentials', true);
   const companyID = req.params.id;
 
   const existed =
@@ -108,16 +98,6 @@ router.post('/:id', verify, jsonParser, async (req, res) => {
 });
 
 router.get('/:id/result', verify, async (req, res) => {
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader(
-    'Access-Control-Allow-Methods',
-    'GET, POST, OPTIONS, PUT, PATCH, DELETE'
-  ); // If needed
-  res.setHeader(
-    'Access-Control-Allow-Headers',
-    'X-Requested-With,content-type'
-  );
-  res.setHeader('Access-Control-Allow-Credentials', true);
   const companyID = req.params.id;
   console.log(companyID);
   const result = await Ra.findOne({ id_company: companyID }, { _id: false });

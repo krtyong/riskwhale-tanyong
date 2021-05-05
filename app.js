@@ -7,11 +7,11 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const port = process.env.PORT || 1000;
 
-const corsOptions = {
-  origin: 'http://localhost:3000',
-  credentials: true,
-  optionSuccessStatus: 200,
-};
+// const corsOptions = {
+//   origin: 'http://localhost:3000',
+//   credentials: true,
+//   optionSuccessStatus: 200,
+// };
 
 //Hide db user password
 require('dotenv').config();
@@ -44,7 +44,7 @@ mongoose
   .catch((err) => console.error(err));
 
 const app = express();
-app.use(cors(corsOptions));
+app.use(cors({ credentials: true, origin: '*' }));
 
 //Import Route
 const auth = require('./routes/auth');
