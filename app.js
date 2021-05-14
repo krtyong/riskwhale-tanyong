@@ -44,7 +44,15 @@ mongoose
   .catch((err) => console.error(err));
 
 const app = express();
-app.use(cors({ credentials: true, origin: '*' }));
+app.use(
+  cors({
+    credentials: true,
+    origin: '*',
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    preflightContinue: false,
+    optionsSuccessStatus: 204,
+  })
+);
 
 //Import Route
 const auth = require('./routes/auth');
