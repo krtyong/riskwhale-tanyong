@@ -7,6 +7,7 @@ var jsonParser = bodyParser.json();
 const verify = require('./verifytoken');
 
 router.post('/:id', verify, jsonParser, async (req, res) => {
+  res.header('Access-Control-Allow-Origin', '*');
   const companyID = req.params.id;
 
   const existed =
@@ -98,6 +99,7 @@ router.post('/:id', verify, jsonParser, async (req, res) => {
 });
 
 router.get('/:id/result', verify, async (req, res) => {
+  res.header('Access-Control-Allow-Origin', '*');
   const companyID = req.params.id;
   console.log(companyID);
   const result = await Ra.findOne({ id_company: companyID }, { _id: false });
