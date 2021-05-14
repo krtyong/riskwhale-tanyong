@@ -8,6 +8,7 @@ const mongoose = require('mongoose');
 const verify = require('./verifytoken');
 
 router.post('/:id/mtpd', verify, jsonParser, async (req, res) => {
+  res.header('Access-Control-Allow-Origin', '*');
   const { departmentmtpd } = req.body;
   const { id } = req.params;
   // const id = req.body.id_company;
@@ -38,6 +39,7 @@ router.post('/:id/mtpd', verify, jsonParser, async (req, res) => {
 });
 
 router.post('/:id/rto', verify, jsonParser, async (req, res) => {
+  res.header('Access-Control-Allow-Origin', '*');
   const { departmentrto } = req.body;
   const { id } = req.params;
   // const id = req.body.id_company;
@@ -69,6 +71,7 @@ router.post('/:id/rto', verify, jsonParser, async (req, res) => {
 });
 
 router.post('/:id/:department', verify, jsonParser, async (req, res) => {
+  res.header('Access-Control-Allow-Origin', '*');
   const { id, department } = req.params;
   const { situation } = req.body;
   mongoose.set('useFindAndModify', false);
@@ -109,6 +112,7 @@ router.post('/:id/:department', verify, jsonParser, async (req, res) => {
 });
 
 router.get('/:id/:department', verify, jsonParser, async (req, res) => {
+  res.header('Access-Control-Allow-Origin', '*');
   const { id, department } = req.params;
   const data = await Bia.findOne(
     {
@@ -126,6 +130,7 @@ router.get('/:id/:department', verify, jsonParser, async (req, res) => {
 });
 
 router.get('/:id', jsonParser, verify, async (req, res) => {
+  res.header('Access-Control-Allow-Origin', '*');
   const { id } = req.params;
   // const existed = Bia.findOne({ id_company: id });
   // if (existed) res.send(existed);
