@@ -4,6 +4,7 @@ const User = require('../models/User');
 const Company = require('../models/Company');
 const bodyParser = require('body-parser');
 var jsonParser = bodyParser.json();
+const mongoose = require('mongoose');
 const verify = require('./verifytoken');
 
 router.post('/:id', verify, jsonParser, async (req, res) => {
