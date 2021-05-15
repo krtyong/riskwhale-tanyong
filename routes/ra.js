@@ -9,58 +9,46 @@ const verify = require('./verifytoken');
 router.post('/:id', verify, jsonParser, async (req, res) => {
   res.header('Access-Control-Allow-Origin', '*');
   const companyID = req.params.id;
+  mongoose.set('useFindAndModify', false);
 
   const existed =
     (await User.findById(companyID)) || (await Company.findById(companyID));
   if (!existed) res.send('user id does not match');
 
-  const impactaverage =
-    (req.body.box[0].impacts.financial +
-      req.body.box[0].impacts.healthandsafety +
-      req.body.box[0].impacts.naturalenv +
-      req.body.box[0].impacts.socialheritage +
-      req.body.box[0].impacts.government +
-      req.body.box[0].impacts.legal) /
-    6;
-  const likelihood = req.body.box[0].likelihood;
-  const impact = Math.round(impactaverage);
-  let value = 0;
-  // const score = Math.round(impactaverage * likelihood);
+  const { box } = req.body;
 
-  if (impact === 1 && likelihood === 1) value = 1;
-  if (impact === 2 && likelihood === 1) value = 2;
-  if (impact === 3 && likelihood === 1) value = 3;
+  const boxes = box.map((item) => {
+    const impactaverage =
+      (item.impacts.financial +
+        item.impacts.healthandsafety +
+        item.impacts.naturalenv +
+        item.impacts.socialheritage +
+        item.impacts.government +
+        item.impacts.legal) /
+      6;
+    const impact = Math.round(impactaverage);
+    const likelihood = item.likelihood;
+    let value = 0;
+    if (impact === 1 && likelihood === 1) value = 1;
+    if (impact === 2 && likelihood === 1) value = 2;
+    if (impact === 3 && likelihood === 1) value = 3;
 
-  if (impact === 1 && likelihood === 2) value = 4;
-  if (impact === 2 && likelihood === 2) value = 5;
-  if (impact === 3 && likelihood === 2) value = 6;
+    if (impact === 1 && likelihood === 2) value = 4;
+    if (impact === 2 && likelihood === 2) value = 5;
+    if (impact === 3 && likelihood === 2) value = 6;
 
-  if (impact === 1 && likelihood === 3) value = 7;
-  if (impact === 2 && likelihood === 3) value = 8;
-  if (impact === 3 && likelihood === 3) value = 9;
+    if (impact === 1 && likelihood === 3) value = 7;
+    if (impact === 2 && likelihood === 3) value = 8;
+    if (impact === 3 && likelihood === 3) value = 9;
 
-  const box = await Ra.findOne({ id_company: companyID }).exec();
-  if (!box) {
+    return { ...item, impact: impact, likelihood: likelihood, value: value };
+  });
+
+  const boxexisted = await Ra.findOne({ id_company: companyID }).exec();
+  if (!boxexisted) {
     const ra = new Ra({
       id_company: companyID,
-      box: [
-        {
-          model: req.body.box[0].model,
-          typeofrisks: req.body.box[0].typeofrisks,
-          risk: req.body.box[0].risk,
-          impacts: {
-            financial: req.body.box[0].impacts.financial,
-            healthandsafety: req.body.box[0].impacts.healthandsafety,
-            naturalenv: req.body.box[0].impacts.naturalenv,
-            socialheritage: req.body.box[0].impacts.socialheritage,
-            government: req.body.box[0].impacts.government,
-            legal: req.body.box[0].impacts.legal,
-          },
-          likelihood: req.body.box[0].likelihood,
-          impact: impact,
-          value: value,
-        },
-      ],
+      box: boxes,
     });
 
     try {
@@ -74,22 +62,7 @@ router.post('/:id', verify, jsonParser, async (req, res) => {
       { id_company: companyID },
       {
         $push: {
-          box: {
-            model: req.body.box[0].model,
-            typeofrisks: req.body.box[0].typeofrisks,
-            risk: req.body.box[0].risk,
-            impacts: {
-              financial: req.body.box[0].impacts.financial,
-              healthandsafety: req.body.box[0].impacts.healthandsafety,
-              naturalenv: req.body.box[0].impacts.naturalenv,
-              socialheritage: req.body.box[0].impacts.socialheritage,
-              government: req.body.box[0].impacts.government,
-              legal: req.body.box[0].impacts.legal,
-            },
-            likelihood: req.body.box[0].likelihood,
-            impact: impact,
-            value: value,
-          },
+          box: boxes,
         },
       },
       { new: true }
@@ -101,7 +74,6 @@ router.post('/:id', verify, jsonParser, async (req, res) => {
 router.get('/:id/result', verify, async (req, res) => {
   res.header('Access-Control-Allow-Origin', '*');
   const companyID = req.params.id;
-  console.log(companyID);
   const result = await Ra.findOne({ id_company: companyID }, { _id: false });
   if (!result) {
     res.status(400).json({ message: 'user id is not correct' });
