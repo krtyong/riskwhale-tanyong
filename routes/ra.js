@@ -75,15 +75,16 @@ router.post('/:id', verify, jsonParser, async (req, res) => {
 router.get('/:id/result', verify, async (req, res) => {
   res.header('Access-Control-Allow-Origin', '*');
   const companyID = req.params.id;
-  const result = await Ra.findOne({ id_company: companyID }, { _id: false });
+  const result = await Ra.findOne({ id_company: companyID });
+  console.log(result);
   if (!result) {
-    res.status(400).json({ message: 'user id is not correct' });
-  }
-
-  try {
-    res.send(result);
-  } catch (err) {
-    res.status(400).json({ message: 'cannot send result' });
+    res.status(400).json({ message: 'no post in ra' });
+  } else {
+    try {
+      res.send(result);
+    } catch (err) {
+      res.status(400).json({ message: 'cannot send result' });
+    }
   }
 });
 
