@@ -49,7 +49,7 @@ router.post('/signup-indiv', jsonParser, async (req, res) => {
 });
 
 router.get('/signup-company', (req, res) => {
-  res.send('welcome to signup for company page');
+  res.status(400).send('welcome to signup for company page');
 });
 
 router.post('/signup-company', jsonParser, async (req, res) => {
@@ -96,7 +96,7 @@ router.post('/signup-company', jsonParser, async (req, res) => {
       res.send({ id_company: company._id });
       console.log({ id_company: company._id }, req.body);
     } else {
-      res.send('Please confirm the information');
+      res.status(400).send('Please confirm the information');
     }
   } catch (err) {
     res.json({ message: err });
