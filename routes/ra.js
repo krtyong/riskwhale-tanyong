@@ -19,16 +19,33 @@ router.post('/:id', verify, jsonParser, async (req, res) => {
   const { box } = req.body;
 
   const boxes = box.map((item) => {
+    const {
+      financial,
+      healthandsafety,
+      naturalenv,
+      socialheritage,
+      government,
+      legal,
+    } = item.impacts;
+    if (
+      financial > 3 ||
+      healthandsafety > 3 ||
+      naturalenv > 3 ||
+      naturalenv > 3 ||
+      socialheritage > 3 ||
+      government > 3 ||
+      legal > 3
+    )
+      res.send('Impact cannot exceed 3');
     const impactaverage =
-      (item.impacts.financial +
-        item.impacts.healthandsafety +
-        item.impacts.naturalenv +
-        item.impacts.socialheritage +
-        item.impacts.government +
-        item.impacts.legal) /
+      (financial +
+        healthandsafety +
+        naturalenv +
+        socialheritage +
+        government +
+        legal) /
       6;
     const impact = Math.round(impactaverage);
-    if (impact > 3) res.send('Impact cannot exceed 3');
     const likelihood = item.likelihood;
     if (likelihood > 3) res.send('Likelihood cannot exceed 3');
     let value = 0;
