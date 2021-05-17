@@ -28,22 +28,22 @@ router.post('/:id', verify, jsonParser, async (req, res) => {
       legal,
     } = item.impacts;
     if (
-      financial > 3 ||
-      healthandsafety > 3 ||
-      naturalenv > 3 ||
-      naturalenv > 3 ||
-      socialheritage > 3 ||
-      government > 3 ||
-      legal > 3
+      parseInt(financial) > 3 ||
+      parseInt(healthandsafety) > 3 ||
+      parseInt(naturalenv) > 3 ||
+      parseInt(naturalenv) > 3 ||
+      parseInt(socialheritage) > 3 ||
+      parseInt(government) > 3 ||
+      parseInt(legal) > 3
     )
       res.send('Impact cannot exceed 3');
     const impactaverage =
-      (financial +
-        healthandsafety +
-        naturalenv +
-        socialheritage +
-        government +
-        legal) /
+      (parseInt(financial) +
+        parseInt(healthandsafety) +
+        parseInt(naturalenv) +
+        parseInt(socialheritage) +
+        parseInt(government) +
+        parseInt(legal)) /
       6;
     const impact = Math.round(impactaverage);
     const likelihood = item.likelihood;
