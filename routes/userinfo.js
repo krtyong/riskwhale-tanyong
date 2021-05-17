@@ -23,6 +23,40 @@ router.get('/company/:id', verify, jsonParser, async (req, res) => {
   }
 });
 
+router.post('/company/:id/edit', jsonParser, async (req, res) => {
+  mongoose.set('useFindAndModify', false);
+  const { id } = req.params;
+  const existed = await Company.findByIdAndUpdate(
+    id,
+    req.body,
+    (err, result) => {
+      if (err) {
+        res.send(err);
+      } else {
+        res.send(result);
+      }
+    }
+  );
+  if (!existed) res.send('Cannot find users');
+});
+
+router.post('/ind/:id/edit', jsonParser, async (req, res) => {
+  mongoose.set('useFindAndModify', false);
+  const { id } = req.params;
+  const existed = await Company.findByIdAndUpdate(
+    id,
+    req.body,
+    (err, result) => {
+      if (err) {
+        res.send(err);
+      } else {
+        res.send(result);
+      }
+    }
+  );
+  if (!existed) res.send('Cannot find users');
+});
+
 router.get('/ind/:id', verify, jsonParser, async (req, res) => {
   // res.sendFile(__dirname + "/signup.html");
   const id = req.params.id;
@@ -30,7 +64,7 @@ router.get('/ind/:id', verify, jsonParser, async (req, res) => {
   if (!user) {
     res.json({ message: 'user is not in database' });
   }
-  
+
   const business = req.query.business;
   mongoose.set('useFindAndModify', false);
 
@@ -64,7 +98,7 @@ router.get('/ind/:id', verify, jsonParser, async (req, res) => {
           },
         ],
       };
-  
+
       try {
         const completeusers = await User.findByIdAndUpdate(
           id,
