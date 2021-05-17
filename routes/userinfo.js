@@ -24,6 +24,7 @@ router.get('/company/:id', verify, jsonParser, async (req, res) => {
 });
 
 router.post('/company/:id/edit', verify, jsonParser, async (req, res) => {
+  res.header('Access-Control-Allow-Origin', '*');
   mongoose.set('useFindAndModify', false);
   const { id } = req.params;
   const existed = await Company.findByIdAndUpdate(
@@ -41,6 +42,7 @@ router.post('/company/:id/edit', verify, jsonParser, async (req, res) => {
 });
 
 router.post('/ind/:id/edit', verify, jsonParser, async (req, res) => {
+  res.header('Access-Control-Allow-Origin', '*');
   mongoose.set('useFindAndModify', false);
   const { id } = req.params;
   const existed = await Company.findByIdAndUpdate(
