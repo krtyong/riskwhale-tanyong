@@ -128,6 +128,62 @@ router.get('/ind/:id', verify, jsonParser, async (req, res) => {
         console.log('cannot fins and get data from users schema');
       }
     }
+
+    if (business === 'dogwalker') {
+      const pizzashop = {
+        companyname: 'Dog Walking Service',
+        businessmodel: {
+          keypartners: 'Pet supplies Retailers',
+          keyactivities:
+            'Commission negotiations and unified platform maintenance',
+          keyresources: 'Software Development',
+          customerrelationships: 'Continuously maintaining a customized',
+          channels:
+            'Customers can reach us through both online and offline site. For online, we have Phone call, Instagram, Facebook, Line account ready to take order. For offline site, customers can present at the restaurants to order the food',
+          customersegments: 'Fast food consumers/ Pizza Nerds/ Millennials',
+          coststructure:
+            'Human salaries reduction/ Raw material/ Gas and fleet/ Restaurants/ Taxes',
+          revenuestream: 'Sale of pizzas',
+        },
+        functionaldepartments: [
+          {
+            name: 'kitchen',
+          },
+          {
+            name: 'front desk',
+          },
+        ],
+      };
+
+      try {
+        const completeusers = await User.findByIdAndUpdate(
+          id,
+          {
+            $set: {
+              companyname: pizzashop.companyname,
+              businessmodel: {
+                keypartners: pizzashop.businessmodel.keypartners,
+                keyactivities: pizzashop.businessmodel.keyactivities,
+                keyresources: pizzashop.businessmodel.keyresources,
+                valueproposition: pizzashop.businessmodel.valueproposition,
+                customerrelationships:
+                  pizzashop.businessmodel.customerrelationships,
+                channels: pizzashop.businessmodel.channels,
+                customersegments: pizzashop.businessmodel.customersegments,
+                coststructure: pizzashop.businessmodel.coststructure,
+                revenuestream: pizzashop.businessmodel.revenuestream,
+              },
+              functionaldepartments: pizzashop.functionaldepartments,
+            },
+          },
+          { new: true }
+        );
+        console.log(completeusers);
+        res.send(completeusers);
+      } catch (err) {
+        console.log('cannot fins and get data from users schema');
+      }
+    }
   } else {
     const user = await User.findById(id);
     res.send(user);
