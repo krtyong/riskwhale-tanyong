@@ -7,43 +7,16 @@ const raSchema = mongoose.Schema({
   },
   box: [
     {
-      model: {
-        type: String,
-        required: true,
-      },
-      typeofrisks: {
-        type: String,
-        required: true,
-      },
-      risk: {
-        type: String,
-        required: true,
-      },
+      model: String,
+      typeofrisks: String,
+      risk: String,
       impacts: {
-        financial: {
-          type: Number,
-          required: true,
-        },
-        healthandsafety: {
-          type: Number,
-          required: true,
-        },
-        naturalenv: {
-          type: Number,
-          required: true,
-        },
-        socialheritage: {
-          type: Number,
-          required: true,
-        },
-        government: {
-          type: Number,
-          required: true,
-        },
-        legal: {
-          type: Number,
-          required: true,
-        },
+        financial: Number,
+        healthandsafety: Number,
+        naturalenv: Number,
+        socialheritage: Number,
+        government: Number,
+        legal: Number,
       },
       likelihood: Number,
       impact: Number,
