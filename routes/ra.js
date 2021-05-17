@@ -46,7 +46,7 @@ router.post('/:id', verify, jsonParser, async (req, res) => {
         parseInt(legal)) /
       6;
     const impact = Math.round(impactaverage);
-    const likelihood = item.likelihood;
+    const likelihood = parseInt(item.likelihood);
     if (likelihood > 3) res.send('Likelihood cannot exceed 3');
     let value = 0;
     if (impact === 1 && likelihood === 1) value = 1;
