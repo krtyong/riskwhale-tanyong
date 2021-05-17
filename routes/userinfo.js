@@ -23,7 +23,7 @@ router.get('/company/:id', verify, jsonParser, async (req, res) => {
   }
 });
 
-router.post('/company/:id/edit', jsonParser, async (req, res) => {
+router.post('/company/:id/edit', verify, jsonParser, async (req, res) => {
   mongoose.set('useFindAndModify', false);
   const { id } = req.params;
   const existed = await Company.findByIdAndUpdate(
@@ -40,7 +40,7 @@ router.post('/company/:id/edit', jsonParser, async (req, res) => {
   if (!existed) res.send('Cannot find users');
 });
 
-router.post('/ind/:id/edit', jsonParser, async (req, res) => {
+router.post('/ind/:id/edit', verify, jsonParser, async (req, res) => {
   mongoose.set('useFindAndModify', false);
   const { id } = req.params;
   const existed = await Company.findByIdAndUpdate(
