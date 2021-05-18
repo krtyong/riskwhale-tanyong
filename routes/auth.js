@@ -116,7 +116,7 @@ router.post('/login', jsonParser, async (req, res) => {
     return res.status(400).send('Email not found');
   }
 
-  // password is correct やった！
+  // password is correct 
   const validPass = await bcrypt.compare(req.body.password, loginUser.password);
   if (!validPass) {
     return res.status(400).send('Password is wrong');
